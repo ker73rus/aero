@@ -23,6 +23,7 @@ TagManager:
   - Clip
   - ClipsPlace
   - Clips
+  - breakPosWrong
   layers:
   - Default
   - TransparentFX
