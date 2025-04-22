@@ -69,12 +69,22 @@ public class CameraMouseLook : MonoBehaviour
                         if (previus != null)
                         {
                             previus.OnHoverExit();
-                            if (previus.tag == "Break" && previus.picked && interactable.tag == "breakPos")
+                            if (previus.tag == "Break" && previus.picked && interactable.tag.Contains("breakPos"))
                             {
-                                previus.Put(hit.transform.gameObject);
-                                interactable.OnHoverExit();
-                                previus.OnHoverExit();
-                                previus = null;
+                                if(interactable.tag == "breakPos")
+                                {
+                                    previus.Put(hit.transform.gameObject);
+                                    interactable.OnHoverExit();
+                                    previus.OnHoverExit();
+                                    previus = null;
+                                }
+                                else
+                                {
+                                    previus.parent = null;
+                                    previus.GetComponent<Transform>().position = hit.transform.position;
+                                    StartCoroutine(canvas.Wrong("Колодка установлена без зазора"));
+                                }
+
                             }
                             else if (previus.tag == "RopeZem" && previus.picked && interactable.tag == "RopeZemPlace")
                             {

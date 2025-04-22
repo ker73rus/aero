@@ -47,6 +47,8 @@ public class RefillController : MonoBehaviour
     Interactable clips;
     [SerializeField]
     Interactable NNZZeml;
+    [SerializeField]
+    Interactable NNZ;
 
     [SerializeField]
     Interactable Donniy;
@@ -69,6 +71,7 @@ public class RefillController : MonoBehaviour
         StartCoroutine(WaitClip());
         StartCoroutine(WaitClips());
         StartCoroutine(WaitNNZZeml());
+        StartCoroutine(WaitNNZ());
         StartCoroutine(WaitShe());
         StartCoroutine(WaitDonniy());
     }
@@ -99,7 +102,7 @@ public class RefillController : MonoBehaviour
     {
         yield return new WaitUntil(() => Donniy.clapan);
         if(She.she != 1)
-        StartCoroutine(canvas.Wrong("Неправильно установлено положение дозатора"));
+        StartCoroutine(canvas.Wrong("Дозатор не переключен на \"0\""));
     }
     IEnumerator WaitShe()
     {
@@ -136,6 +139,17 @@ public class RefillController : MonoBehaviour
         yield return new WaitUntil(() => !NNZZeml.picked);
         NNZzem = true;
     }
+    IEnumerator WaitNNZ()
+    {
+        yield return new WaitUntil(() => NNZ.picked);
+        yield return new WaitUntil(() => !NNZ.picked);
+        if (!clipsB && !NNZzem && NNZ.parent != null)
+        {
+            StartCoroutine(canvas.Wrong("Неправильное соединение ННЗ в отсеке налива"));
+        }
+        if (NNZ.parent == null)
+            StartCoroutine(WaitNNZ());
+    }
     IEnumerator WaitZeml()
     {
         yield return new WaitUntil(() => zazemlenie.picked);
@@ -159,13 +173,15 @@ public class RefillController : MonoBehaviour
     {
         yield return new WaitUntil(() => lever.position == 1);
         print("Выезжает");
-
+        float dif = 145 * Time.deltaTime;
         while (lever.position == 1 && rot <= 1000)
         {
             yield return new WaitForEndOfFrame();
-            Puller.Rotate(new Vector3(0,0.3f,0));
-            rot += 0.3f;
+            Puller.Rotate(new Vector3(0,dif,0));
+            rot += dif;
         }
+        yield return new WaitForSeconds(10f);
+        if (lever.position == 1) StartCoroutine(canvas.Wrong("Не выключено отключение рычага \"размотка\""));
         StartCoroutine(RopeOut());
     }
     IEnumerator RopeIn()

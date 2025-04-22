@@ -123,11 +123,16 @@ public class Interactable : MonoBehaviour
         picked = false;
         transform.position = parent.position;
         transform.rotation = parent.rotation;
+        if (parent.GetComponentInParent<Transform>() == parent)
+            transform.parent = null;
+        else
+        transform.parent = parent.GetComponentInParent<Transform>();
         parent.gameObject.SetActive(false);
     }
     private void Update()
     {
-        if (picked) {
+        if (picked && parent != null) {
+
             this.transform.position = parent.position;
             transform.rotation = parent.rotation;
         }
