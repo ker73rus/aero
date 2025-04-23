@@ -29,8 +29,9 @@ public class ClapanController : MonoBehaviour
         if (Duz.GetComponent<Interactable>().duz)
         {
             Duz.GetComponent<Interactable>().Duz();
-            if (Point.transform.position.y > 0.70f)
-                Point.transform.position -= new Vector3(0, 0.02f, 0);
+            Point.transform.localPosition = new Vector3(0,-0.28f, 0);
+            yield return new WaitForSeconds(0.5f);
+            Duzzer.GetComponent<Interactable>().Duz();
         }
         StartCoroutine(duzReaction());
     }
@@ -39,8 +40,7 @@ public class ClapanController : MonoBehaviour
         yield return new WaitUntil(() => Duz.GetComponent<Interactable>().duz);
         if (!Duzzer.GetComponent<Interactable>().duz)
         {
-            if(Point.transform.position.y < 0.72f)
-            Point.transform.position += new Vector3(0, 0.01f, 0);
+            Point.transform.localPosition = new Vector3(0, 0, 0);
         }
         StartCoroutine(pointReaction());
     }

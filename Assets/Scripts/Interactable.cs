@@ -10,6 +10,7 @@ public class Interactable : MonoBehaviour
     public Transform parent;
     public bool open = false;
     public bool duz = false;
+    public bool duzzer = false;
     public bool clapan = false;
     public bool newLever = false;
     public int she = 0;
@@ -55,13 +56,13 @@ public class Interactable : MonoBehaviour
         open = true;
         GetComponent<Collider>().isTrigger = true;
         Transform papa = parent;
-        Vector3 rotate = papa.eulerAngles;
+        Vector3 rotate = papa.localEulerAngles;
         if (tag == "Shtecker")
         {
-            while (rotate.z > -180)
+            while (rotate.z < 230)
             {
-                rotate.z--;
-                papa.rotation = Quaternion.Euler(rotate);
+                rotate.z++;
+                papa.localRotation = Quaternion.Euler(rotate);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -70,7 +71,7 @@ public class Interactable : MonoBehaviour
             while (papa.rotation.x < 0.9f)
             {
                 rotate.x++;
-                papa.rotation = Quaternion.Euler(rotate);
+                papa.localRotation = Quaternion.Euler(rotate);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -80,13 +81,13 @@ public class Interactable : MonoBehaviour
     {
         open = false;
         Transform papa = parent;
-        Vector3 rotate = papa.eulerAngles;
+        Vector3 rotate = papa.localEulerAngles;
         if (tag == "Shtecker")
         {
-            while (rotate.z < 180)
+            while (rotate.z > 0)
             {
-                rotate.z++;
-                papa.rotation = Quaternion.Euler(rotate);
+                rotate.z--;
+                papa.localRotation = Quaternion.Euler(rotate);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -95,7 +96,7 @@ public class Interactable : MonoBehaviour
             while (papa.rotation.x > 0)
             {
                 rotate.x++;
-                papa.rotation = Quaternion.Euler(rotate);
+                papa.localRotation = Quaternion.Euler(rotate);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -140,15 +141,31 @@ public class Interactable : MonoBehaviour
 
     public void Duz()
     {
-        if (!duz)
+        if (!duzzer)
         {
-            transform.position -= new Vector3(0, 0, 0.05f);
-            duz = true;
+            if (!duz)
+            {
+                transform.position -= new Vector3(0, 0, 0.05f);
+                duz = true;
+            }
+            else
+            {
+                transform.position += new Vector3(0, 0, 0.05f);
+                duz = false;
+            }
         }
         else
         {
-            transform.position += new Vector3(0, 0, 0.05f);
-            duz = false;
+            if (!duz)
+            {
+                transform.rotation = Quaternion.Euler(0,-90,25);
+                duz = true;
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, -90, 0);
+                duz = true;
+            }
         }
     }
     public void Clapan()
