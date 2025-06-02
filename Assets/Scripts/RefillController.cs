@@ -16,6 +16,8 @@ public class RefillController : MonoBehaviour
     [SerializeField]
     float Dat4;
     [SerializeField]
+    float rashodometr;
+    [SerializeField]
     DATController dAT;
     [SerializeField]
     Interactable Pusher;
@@ -23,6 +25,8 @@ public class RefillController : MonoBehaviour
     GameObject Rope;
     [SerializeField]
     LeverControl lever;
+    [SerializeField]
+    Interactable newLever;
     [SerializeField]
     Transform Puller;
     [SerializeField]
@@ -59,6 +63,9 @@ public class RefillController : MonoBehaviour
     Interactable She;
     bool clipsB = false;
     bool NNZzem = false;
+    bool breakDone = false;
+    bool zazeml = false;
+    bool ropeout = false;
 
     // Start is called before the first frame update
     void Start()
@@ -84,6 +91,7 @@ public class RefillController : MonoBehaviour
             if (Input.GetKey(KeyCode.Space))
             {
                 dAT.SetDatClap(Dat4);
+                dAT.Setrashodometr(rashodometr);
                 fuelNum +=fuelSpeed;
                 fuel.text = (int)(fuelNum) + "";
             }
@@ -109,7 +117,7 @@ public class RefillController : MonoBehaviour
         yield return new WaitUntil(() => She.she != 0);
         if(!(clipsB && NNZzem && shtecker.open && Duz.duz))
         {
-            if (!clipsB || !NNZzem)
+            if (!clipsB && !NNZzem)
             {
                 StartCoroutine(canvas.Wrong("Не проведено выравнивание потенциалов"));
             }
@@ -119,7 +127,7 @@ public class RefillController : MonoBehaviour
             }
             if (!shtecker.open)
             {
-                StartCoroutine(canvas.Wrong("Не открыт ННЗ"));
+                StartCoroutine(canvas.Wrong("Не открыт Тарельчатый клапан"));
             }
         }
         yield return new WaitForSeconds(20);
@@ -142,8 +150,16 @@ public class RefillController : MonoBehaviour
     IEnumerator WaitNNZ()
     {
         yield return new WaitUntil(() => NNZ.picked);
+        if (!ropeout)
+            StartCoroutine(canvas.Wrong("Не включена размотка"));
+        if (!zazeml)
+            StartCoroutine(canvas.Wrong("Не установлены штырь заземления"));
+        if (!breakDone)
+            StartCoroutine(canvas.Wrong("Не установлены тормозные колодки"));
+
+
         yield return new WaitUntil(() => !NNZ.picked);
-        if (!clipsB && !NNZzem && NNZ.parent != null)
+        if ((!clipsB && !NNZzem) && NNZ.parent != null)
         {
             StartCoroutine(canvas.Wrong("Неправильное соединение ННЗ в отсеке налива"));
         }
@@ -153,11 +169,14 @@ public class RefillController : MonoBehaviour
     IEnumerator WaitZeml()
     {
         yield return new WaitUntil(() => zazemlenie.picked);
+        if(!breakDone)
+            StartCoroutine(canvas.Wrong("Не установлены тормозные колодки"));
         yield return new WaitUntil(() => !zazemlenie.picked);
         if(!zazemlenie.picked && zazemlenie.parent == null)
         {
             StartCoroutine(canvas.Wrong("Неправильно устанавлен штырь заземления"));
         }
+        else zazeml = true;
     }
     IEnumerator WaitBreak()
     {
@@ -167,12 +186,14 @@ public class RefillController : MonoBehaviour
         if (break1.parent.name != "BreakPosForward" && break2.parent.name != "BreakPosForward")
         {
             StartCoroutine(canvas.Wrong("Неправильная последовательность установки колодок"));
-        } 
+        }
+        else breakDone = true;
     }
     IEnumerator RopeOut()
     {
         yield return new WaitUntil(() => lever.position == 1);
         print("Выезжает");
+        ropeout = true;
         float dif = 145 * Time.deltaTime;
         while (lever.position == 1 && rot <= 1000)
         {
@@ -180,7 +201,7 @@ public class RefillController : MonoBehaviour
             Puller.Rotate(new Vector3(0,dif,0));
             rot += dif;
         }
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(20f);
         if (lever.position == 1) StartCoroutine(canvas.Wrong("Не выключено отключение рычага \"размотка\""));
         StartCoroutine(RopeOut());
     }
@@ -200,6 +221,8 @@ public class RefillController : MonoBehaviour
     {
         yield return new WaitUntil(() => Pusher.picked);
         push = true;
+        if (!newLever.newLever)
+            StartCoroutine(canvas.Wrong("Не опущен рычаг"));
         yield return new WaitUntil(() => !Pusher.picked);
         StartCoroutine(PushActive());
     }

@@ -12,12 +12,20 @@ public class DATController : MonoBehaviour
     GameObject DatFuel;
     [SerializeField]
     GameObject DatClap;
+    [SerializeField]
+    GameObject rashodometr;
 
     public void SetDatEnter(float value)
     {
         Vector3 rotate = transform.eulerAngles;
         rotate.z = -270 * value;
         DatEnter.transform.rotation = Quaternion.Euler(rotate);
+    }
+    public void Setrashodometr(float value)
+    {
+        Vector3 rotate = transform.eulerAngles;
+        rotate.z = -270 * value;
+        rashodometr.transform.rotation = Quaternion.Euler(rotate);
     }
     public void SetDatExit(float value)
     {
@@ -42,5 +50,7 @@ public class DATController : MonoBehaviour
         Vector3 rotate = transform.eulerAngles;
         rotate.z = 0;
         DatClap.transform.rotation = Quaternion.Euler(rotate);
+        rashodometr.transform.rotation = Quaternion.Euler(rotate);
+
     }
 }

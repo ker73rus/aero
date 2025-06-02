@@ -17,6 +17,6 @@ public class RopeHelper : MonoBehaviour
     }
     private void Update()
     {
-        rope.ropeLength =  Mathf.Abs(start.position.z - end.position.z) * 1.2f; 
+        rope.ropeLength =  Mathf.Abs(start.position.z - end.position.z) * 1.4f; 
     }
 }

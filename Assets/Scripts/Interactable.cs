@@ -37,6 +37,10 @@ public class Interactable : MonoBehaviour
         {
             StartCoroutine(pusherPicker(parent.gameObject));
         }
+        else if (parent != null)
+        {
+            StartCoroutine(afterPickFromPlaceDelay(parent.gameObject));
+        }
         parent = gameObject.transform;
         picked = true;
     }
@@ -108,10 +112,8 @@ public class Interactable : MonoBehaviour
 
     IEnumerator waitForPick(GameObject gameObject)
     {
-        yield return new WaitWhile(() => picked == false);
-        yield return new WaitWhile(() => picked == true);
+        yield return new WaitForSeconds(2);
         gameObject.SetActive(true);
-        GetComponent<Collider>().isTrigger = false;
     }
     public void Drop()
     {
@@ -130,6 +132,11 @@ public class Interactable : MonoBehaviour
         transform.parent = parent.GetComponentInParent<Transform>();
         parent.gameObject.SetActive(false);
     }
+    IEnumerator afterPickFromPlaceDelay(GameObject gameObject)
+    {
+        yield return new WaitForSeconds(1);
+        gameObject.SetActive(true) ;
+    }
     private void Update()
     {
         if (picked && parent != null) {
@@ -141,6 +148,7 @@ public class Interactable : MonoBehaviour
 
     public void Duz()
     {
+        print("Duz");
         if (!duzzer)
         {
             if (!duz)
@@ -205,12 +213,8 @@ public class Interactable : MonoBehaviour
                 transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
                 break;
             case 1: 
-                she = 2;
-                transform.rotation = Quaternion.Euler(new Vector3(0, 180, 70));
-                break;
-            case 2:
                 she = 0;
-                transform.rotation = Quaternion.Euler(new Vector3(0, 180, -90));
+                transform.rotation = Quaternion.Euler(new Vector3(0, 180, 70));
                 break;
         }
     }

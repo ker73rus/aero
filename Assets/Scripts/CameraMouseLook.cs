@@ -68,51 +68,7 @@ public class CameraMouseLook : MonoBehaviour
                             interactable.OnHoverEnter();
                         if (previus != null)
                         {
-                            previus.OnHoverExit();
-                            if (previus.tag == "Break" && previus.picked && interactable.tag.Contains("breakPos"))
-                            {
-                                if(interactable.tag == "breakPos")
-                                {
-                                    previus.Put(hit.transform.gameObject);
-                                    interactable.OnHoverExit();
-                                    previus.OnHoverExit();
-                                    previus = null;
-                                }
-                                else
-                                {
-                                    previus.parent = null;
-                                    previus.GetComponent<Transform>().position = hit.transform.position;
-                                    StartCoroutine(canvas.Wrong("Колодка установлена без зазора"));
-                                }
-
-                            }
-                            else if (previus.tag == "RopeZem" && previus.picked && interactable.tag == "RopeZemPlace")
-                            {
-                                previus.Put(hit.transform.gameObject);
-                                interactable.OnHoverExit();
-                                previus.OnHoverExit();
-                                previus = null;
-                            }
-                            else if (previus.tag == "rope" && previus.picked && interactable.tag == "ropePlace")
-                            {
-                                previus.Put(hit.transform.gameObject);
-                                interactable.OnHoverExit();
-                                previus.OnHoverExit();
-                                previus = null;
-                            }
-                            else if (previus.tag == "Pusher" && previus.picked && interactable.tag == "PusherPlace")
-                            {
-                                previus.Put(hit.transform.gameObject);
-                                interactable.OnHoverExit();
-                                previus.OnHoverExit();
-                            }
-                            else if (previus.tag == "Clips" && previus.picked && interactable.tag == "ClipsPlace")
-                            {
-                                previus.Put(hit.transform.gameObject);
-                                interactable.OnHoverExit();
-                                previus.OnHoverExit();
-                                previus = null;
-                            }
+                            
                         }
                         if(previus == null || !previus.picked )
                             previus = interactable;
@@ -134,7 +90,51 @@ public class CameraMouseLook : MonoBehaviour
                     }
                     if (Input.GetMouseButtonDown(0))
                     {
-                        
+                        previus.OnHoverExit();
+                        if (previus.tag == "Break" && previus.picked && interactable.tag.Contains("breakPos"))
+                        {
+                            if (interactable.tag == "breakPos")
+                            {
+                                previus.Put(hit.transform.gameObject);
+                                interactable.OnHoverExit();
+                                previus.OnHoverExit();
+                                previus = null;
+                            }
+                            else
+                            {
+                                previus.parent = null;
+                                previus.GetComponent<Transform>().position = hit.transform.position;
+                                StartCoroutine(canvas.Wrong("Колодка установлена без зазора"));
+                            }
+
+                        }
+                        else if (previus.tag == "RopeZem" && previus.picked && interactable.tag == "RopeZemPlace")
+                        {
+                            previus.Put(hit.transform.gameObject);
+                            interactable.OnHoverExit();
+                            previus.OnHoverExit();
+                            previus = null;
+                        }
+                        else if (previus.tag == "rope" && previus.picked && interactable.tag == "ropePlace")
+                        {
+                            previus.Put(hit.transform.gameObject);
+                            interactable.OnHoverExit();
+                            previus.OnHoverExit();
+                            previus = null;
+                        }
+                        else if (previus.tag == "Pusher" && previus.picked && interactable.tag == "PusherPlace")
+                        {
+                            previus.Put(hit.transform.gameObject);
+                            interactable.OnHoverExit();
+                            previus.OnHoverExit();
+                        }
+                        else if (previus.tag == "Clips" && previus.picked && interactable.tag == "ClipsPlace")
+                        {
+                            previus.Put(hit.transform.gameObject);
+                            interactable.OnHoverExit();
+                            previus.OnHoverExit();
+                            previus = null;
+                        }
 
                         if (interactable.tag != "She" && interactable.tag != "NewLever" &&  interactable.tag != "Clapan" && interactable.tag != "Duz" && interactable.tag !="Shtecker" && interactable.tag != "Door" && interactable.tag != "breakPos" && interactable.tag != "RopeZemPlace" && interactable.tag != "Lever" && interactable.tag != "ropePlace")
                             interactable.PickUp(posInHands);
